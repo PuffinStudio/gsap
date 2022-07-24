@@ -1,6 +1,12 @@
 import { gsap } from './gsap';
-import { MutableRefObject, useMemo, useRef } from 'react';
-
+import {
+  DependencyList,
+  EffectCallback,
+  MutableRefObject,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 
 // source https://greensock.com/react-advanced#useSelector
 
@@ -16,4 +22,16 @@ function useArrayRef<T>(): [MutableRefObject<T[]>, (ref: T) => void] {
   return [refs, ref => ref && refs.current.push(ref)];
 }
 
-export { useSelector, useArrayRef };
+function useGsapEffect(
+  callback: EffectCallback,
+  deps: DependencyList = []
+): void {
+  const animated = useRef(false);
+  if (animated.current) {
+    return;
+  }
+  animated.current = true;
+  useEffect(callback, deps);
+}
+
+export { useSelector, useArrayRef, useGsapEffect };
