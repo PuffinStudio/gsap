@@ -27,11 +27,13 @@ function useGsapEffect(
   deps: DependencyList = []
 ): void {
   const animated = useRef(false);
-  if (animated.current) {
-    return;
-  }
-  animated.current = true;
-  useEffect(callback, deps);
+  useEffect(() => {
+    if (animated.current) {
+      return;
+    }
+    animated.current = true;
+    return callback();
+  }, deps);
 }
 
 export { useSelector, useArrayRef, useGsapEffect };
